@@ -35,7 +35,7 @@ function alert_create_channel(string $projectId): void
     $channelClient = new NotificationChannelServiceClient([
         'projectId' => $projectId,
     ]);
-    $projectName = 'projects/' . $projectId;
+    $projectName = $channelClient->projectName($projectId);
 
     $channel = new NotificationChannel();
     $channel->setDisplayName('Test Notification Channel');

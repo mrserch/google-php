@@ -53,7 +53,7 @@ function create_uptime_check($projectId, $hostName = 'example.com', $displayName
     $uptimeCheckConfig->setMonitoredResource($monitoredResource);
 
     $uptimeCheckConfig = $uptimeCheckClient->createUptimeCheckConfig(
-        'projects/' . $projectId,
+        $uptimeCheckClient->projectName($projectId),
         $uptimeCheckConfig
     );
 

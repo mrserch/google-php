@@ -39,7 +39,7 @@ function list_uptime_checks(string $projectId): void
     ]);
 
     $pages = $uptimeCheckClient->listUptimeCheckConfigs(
-        'projects/' . $projectId
+        $uptimeCheckClient->projectName($projectId)
     );
 
     foreach ($pages->iteratePages() as $page) {
