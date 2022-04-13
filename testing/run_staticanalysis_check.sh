@@ -37,7 +37,7 @@ do
         echo "Skipping $dir (explicitly flagged to be skipped)"
         continue
     fi
-    composer update --working-dir=$dir --ignore-platform-reqs
+    composer update --working-dir=$dir --ignore-platform-reqs -q
     echo "<?php require_once 'testing/sample_helpers.php';require_once '$dir/vendor/autoload.php';" > autoload.php
     neon="testing/phpstan/default.neon.dist"
     if [ -f "testing/phpstan/$dir.neon.dist" ]; then
