@@ -24,7 +24,6 @@ namespace Google\Cloud\Samples\PubSub;
 
 # [START pubsub_create_avro_schema]
 use Google\Cloud\PubSub\PubSubClient;
-use Google\Cloud\PubSub\V1\Schema\Type;
 
 /**
  * Create a Schema with an AVRO definition.

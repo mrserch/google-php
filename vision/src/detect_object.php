@@ -20,7 +20,6 @@ namespace Google\Cloud\Samples\Vision;
 
 use Google\Cloud\Vision\V1\ImageAnnotatorClient;
 
-
 /**
  * @param string $path (example: 'path/to/your/image.jpg')
  */
