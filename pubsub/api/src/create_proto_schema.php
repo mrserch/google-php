@@ -39,8 +39,8 @@ function create_proto_schema($projectId, $schemaId, $protoFile): void
         'projectId' => $projectId,
     ]);
 
-    $definition = file_get_contents($protoFile);
-    $schema = $pubsub->createSchema($schemaId, Type::PROTOCOL_BUFFER, $definition);
+    $definition = (string) file_get_contents($protoFile);
+    $schema = $pubsub->createSchema($schemaId, 'PROTOCOL_BUFFER', $definition);
 
     printf('Schema %s created.', $schema->name());
 }

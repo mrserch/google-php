@@ -72,8 +72,8 @@ $dlp = new DlpServiceClient();
 
 // Read a CSV file
 $csvLines = file($inputCsvFile, FILE_IGNORE_NEW_LINES);
-$csvHeaders = explode(',', $csvLines[0]);
-$csvRows = array_slice($csvLines, 1);
+$csvHeaders = explode(',', $csvLines ? $csvLines[0] : '');
+$csvRows = array_slice($csvLines ? $csvLines : [], 1);
 
 // Convert CSV file into protobuf objects
 $tableHeaders = array_map(function ($csvHeader) {
@@ -171,7 +171,9 @@ foreach ($response->getOverview()->getTransformationSummaries() as $summary) {
 }
 
 // Save the results to a file
-$csvRef = fopen($outputCsvFile, 'w');
+if (!$csvRef = fopen($outputCsvFile, 'w')) {
+    throw new \Exception('failed to open output file for writing');
+}
 fputcsv($csvRef, $csvHeaders);
 foreach ($response->getItem()->getTable()->getRows() as $tableRow) {
     $values = array_map(function ($tableValue) {
@@ -180,7 +182,7 @@ foreach ($response->getItem()->getTable()->getRows() as $tableRow) {
         }
         $protoDate = $tableValue->getDateValue();
         $date = mktime(0, 0, 0, $protoDate->getMonth(), $protoDate->getDay(), $protoDate->getYear());
-        return strftime('%D', $date);
+        return strftime('%D', (int) $date);
     }, iterator_to_array($tableRow->getValues()));
     fputcsv($csvRef, $values);
 };

@@ -13,20 +13,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -ex
+set -e
+
+if [ "${BASH_DEBUG}" = "true" ]; then
+    set -x
+fi
 
 if [ "${TEST_DIRECTORIES}" = "" ]; then
   TEST_DIRECTORIES="*"
 fi
 
-for dir in $(find $TEST_DIRECTORIES -type d -name src -not -path 'appengine/*' -not -path '*/vendor/*' -exec dirname {} \;);
+SKIP_DIRS=(
+  appengine
+  bigtable
+  dialogflow
+  iot
+)
+
+for dir in $(find $TEST_DIRECTORIES -type d -name src -not -path '/*'  -not -path 'appengine/*' -not -path '*/vendor/*' -exec dirname {} \;);
 do
-    composer install --working-dir=$dir --ignore-platform-reqs
+    if [[ " ${SKIP_DIRS[@]} " =~ " ${dir} " ]]; then
+        echo "Skipping $dir (explicitly flagged to be skipped)"
+        continue
+    fi
+    composer update --working-dir=$dir --ignore-platform-reqs
     echo "<?php require_once 'testing/sample_helpers.php';require_once '$dir/vendor/autoload.php';" > autoload.php
-    neon="testing/phpstan/phpstan.neon.dist"
+    neon="testing/phpstan/default.neon.dist"
     if [ -f "testing/phpstan/$dir.neon.dist" ]; then
         neon="testing/phpstan/$dir.neon.dist"
     fi
+    echo "Running phpstan in $dir with config $neon"
     testing/vendor/bin/phpstan analyse $dir/src \
         --autoload-file=autoload.php \
         --configuration=$neon

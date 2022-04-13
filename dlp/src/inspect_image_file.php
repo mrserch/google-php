@@ -48,7 +48,7 @@ $dlp = new DlpServiceClient();
 // Get the bytes of the file
 $fileBytes = (new ByteContentItem())
     ->setType(BytesType::IMAGE_PNG)
-    ->setData(file_get_contents($filepath));
+    ->setData((string) file_get_contents($filepath));
 
 // Construct request
 $parent = "projects/$projectId/locations/global";

@@ -66,8 +66,10 @@ $inspectConfig = (new InspectConfig())
     ->setInfoTypes($infoTypes);
 
 // Read image file into a buffer
-$imageRef = fopen($imagePath, 'rb');
-$imageBytes = fread($imageRef, filesize($imagePath));
+if (!$imageRef = fopen($imagePath, 'rb')) {
+    throw new \Exception('failed to open image path for reading');
+}
+$imageBytes = (string) fread($imageRef, (int) filesize($imagePath));
 fclose($imageRef);
 
 // Get the image's content type

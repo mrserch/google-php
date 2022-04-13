@@ -36,7 +36,7 @@ function alert_list_channels($projectId): void
     ]);
 
     $channels = $channelClient->listNotificationChannels(
-        $channelClient->projectName($projectId)
+        'projects/' . $projectId
     );
     foreach ($channels->iterateAllElements() as $channel) {
         printf('Name: %s (%s)' . PHP_EOL, $channel->getDisplayName(), $channel->getName());
